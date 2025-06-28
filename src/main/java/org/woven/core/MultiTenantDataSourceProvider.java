@@ -1,7 +1,6 @@
 package org.woven.core;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -9,9 +8,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+@Slf4j
 public class MultiTenantDataSourceProvider extends BaseMultiTenantDataSourceProvider {
 
-    private static final Logger logger = LoggerFactory.getLogger(MultiTenantDataSourceProvider.class);
     private final DataSource dataSource;
 
     @Inject
@@ -23,9 +22,9 @@ public class MultiTenantDataSourceProvider extends BaseMultiTenantDataSourceProv
     public Connection getConnection(Object tenantIdentifier) throws SQLException {
         // Implementation to get a connection for the specified tenant
         // This could involve looking up a data source based on the tenant identifier
-        logger.atInfo().log("Getting connection for tenant: " + tenantIdentifier);
+        log.info("Getting connection for tenant: {}", tenantIdentifier);
         String tenantId = tenantIdentifier != null ? tenantIdentifier.toString() : "public";
-        logger.info("Acquiring connection for tenant {}", tenantId);
+        log.info("Acquiring connection for tenant {}", tenantId);
         Connection connection = getAnyConnection();
         try (Statement statement = connection.createStatement()) {
             statement.execute(String.format("SET search_path TO %s;", tenantId));
@@ -37,7 +36,7 @@ public class MultiTenantDataSourceProvider extends BaseMultiTenantDataSourceProv
     public void releaseConnection(Object tenantIdentifier, Connection connection)
             throws SQLException {
         // Implementation to release the connection for the specified tenant
-        logger.atInfo().log("Releasing connection for tenant: " + tenantIdentifier);
+        log.info("Releasing connection for tenant: {}", tenantIdentifier);
         try (Statement statement = connection.createStatement()) {
             statement.execute("SET search_path TO public;");
         }

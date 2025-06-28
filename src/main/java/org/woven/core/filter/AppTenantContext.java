@@ -2,10 +2,11 @@ package org.woven.core.filter;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import static org.woven.core.constants.TenantConstants.DEFAULT_TENANT;
 import static org.woven.core.constants.TenantConstants.LOGGER_TENANT_ID;
 import static org.woven.core.constants.TenantConstants.TENANT_HEADER;
 
+@Slf4j
 public class AppTenantContext implements Filter {
 
     private static final ThreadLocal<String> currentTenant = new ThreadLocal<>();

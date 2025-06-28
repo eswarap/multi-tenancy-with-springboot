@@ -23,9 +23,6 @@ public class TenantController {
         this.tenantService = tenantService;
     }
 
-
-
-    // Example method to create a tenant
     @PostMapping("/create")
     public ResponseEntity<String> createTenant(@RequestBody String tenantName) {
         tenantService.createTenant(tenantName);
